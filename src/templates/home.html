@@ -49,7 +49,7 @@
       data: JSON.stringify(data),
       success: function(res){
         if(res.data.length>0){
-          $('#time').append('Execution time : '+res.time+'s');
+          $('#time').append('Execution time : '+res.time.toFixed(2)+'s');
           $.each(res.data, function(index, item){
             var barge;
             var location;
@@ -85,7 +85,7 @@
           });
 
         }else{
-          $('#time').append('Execution time : ' + res.time + 's');
+          $('#time').append('Execution time : ' + res.time.toFixed(2) + 's');
           result = '<div style="width: 100%;text-align:center"><h4 >Data not Found</h4></div>';
         }
         $('#result').append(result);

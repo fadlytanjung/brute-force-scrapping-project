@@ -25,7 +25,7 @@ def search():
 
     data = search(jsonData['data'])
     return jsonify({ 'code':200, 'message' : 'Data Fetched',
-    'data': data,'time':float("{:.2f}".format((time.time() - start_time))) }), 200
+    'data': data,'time':(time.time() - start_time) }), 200
 
 @app.route('/crawl')
 def crawl():
