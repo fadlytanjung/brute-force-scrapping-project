@@ -1,0 +1,99 @@
+{% include "header.html" %}
+<div class="container">
+  <div class="heading-info text-center">
+    <h3>Welcome to BFA Seacrh Engine</h3>
+  </div>
+  <div class="search-container">
+    <form class="form-container" id="form">
+      <div class="form-group">
+        <div class="row d-flex " style="align-items: center;">
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="search" aria-describedby="emailHelp"
+              placeholder="Type keyword">
+          </div>
+          <div class="col-sm-2 text-center">
+            <button type="submit" class="btn btn-primary btn-custom">Search</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="result-container">
+    <p id="time"></p>
+    <div class="row" id="result">
+    </div>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='jquery.min.js')}}"></script>
+<script type="text/javascript">
+  $('#form').submit(function(e){
+    e.preventDefault();
+    var data = {
+      data: $('#search').val()
+    };
+    var result = ''
+    $('#result').empty();
+    $('#time').empty();
+    if($('#search').val()===''){
+      alert('Keyword cannot null');
+      return false;
+    }
+    if(data.data.split(' ').length > 5){
+      alert('Maximum 6 words');
+      return false;
+    }
+    $.ajax({
+      type: 'POST',
+      url: '/search',
+      contentType: 'application/json',
+      data: JSON.stringify(data),
+      success: function(res){
+        if(res.data.length>0){
+          $('#time').append('Execution time : '+res.time+'s');
+          $.each(res.data, function(index, item){
+            var barge;
+            var location;
+            if (item.source === 'https://eventpelajar.com/lomba/') { 
+              badge = 'badge-info';
+            } else if(item.source === 'https://eventkampus.com/event/kategori/expo'){
+              badge = 'badge-success'; 
+            }else{
+              badge= 'badge-warning';
+            };
+            if(item.location !== ''){ 
+              location = item.location;
+            }else{
+              location = 'Unknown';
+            }
+            result+= '<div class="col-md-4">'+
+              '<a href="'+item.link+'" target="_blank" style="text-decoration:none;">'+
+              '<div class="content">'+
+                '<div class="img">'+
+                 '<img src="'+item.image+'" />'+
+                '</div>'+
+                '<div class="content-info">'+
+                  '<span class="badge badge-primary">'+item.category+'</span>'+
+                  '<p class="title">'+item.title+'</p>'+
+                  '<p class="description">'+item.description+'</p>'+
+                  '<p class="location"><i class="fa fa-map-marker-alt"></i> '+ location+'</p>'+
+                  '<p class="date"><i class="fa fa-calendar"></i> '+item.date+'</p>'+
+                  '<span class="badge '+badge+'"> '+item.source+'</span>'+
+                '</div>'+
+              '</div>'+
+              '</a>'+
+            '</div>'; 
+          });
+
+        }else{
+          $('#time').append('Execution time : ' + res.time + 's');
+          result = '<div style="width: 100%;text-align:center"><h4 >Data not Found</h4></div>';
+        }
+        $('#result').append(result);
+      },
+      error: function(err){
+        console.log(err)
+      }
+    });
+  });
+</script>
+{% include "footer.html" %}

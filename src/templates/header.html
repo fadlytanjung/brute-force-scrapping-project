@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <!-- datatables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css" />
+
+  <!-- styles CSS -->
+  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/f2ee4a9353.js" crossorigin="anonymous"></script>
+  <title>Brute Force Search</title>
+</head>
+
+<body>
+  
+  <header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
+    <div class="container">
+      <a class="navbar-brand mr-0 mr-md-2" href="/" aria-label="Bootstrap">
+        Brute Force App
+      </a>
+      
+      <div class="navbar-nav-scroll">
+        <ul class="navbar-nav bd-navbar-nav flex-row">
+          <li class="nav-item {{ 'active' if data == '/' else '' }}">
+            <a class="nav-link " href="/">Home</a>
+          </li>
+          <li class="nav-item {{ 'active' if data == '/crawl' else '' }}">
+            <a class="nav-link " href="/crawl">Crawl</a>
+          </li>
+          <li class="nav-item {{ 'active' if data == '/about' else '' }}">
+            <a class="nav-link " href="#">About</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
