@@ -57,9 +57,20 @@
               badge = 'badge-info';
             } else if(item.source === 'https://eventkampus.com/event/kategori/expo'){
               badge = 'badge-success'; 
-            }else{
+            } else if (item.source === 'https://www.anakteknik.co.id/') {
+              badge = 'badge-secondary';
+            } else if (item.source === 'https://www.informasilomba.com/') {
+              badge = 'badge-danger';
+            } else if (item.source === 'https://lombapad.com/') {
+              badge = 'badge-light';
+            } else if (item.source === 'http://lomba.asia/') {
+              badge = 'badge-dark';
+            } else if (item.source === 'http://www.info-lomba.com/') {
+              badge = 'badge-primary';
+            } else{
               badge= 'badge-warning';
             };
+
             if(item.location !== ''){ 
               location = item.location;
             }else{
@@ -72,12 +83,12 @@
                  '<img src="'+item.image+'" />'+
                 '</div>'+
                 '<div class="content-info">'+
-                  '<span class="badge badge-primary">'+item.category+'</span>'+
+                  '<span class="badge badge-primary top">'+item.category+'</span>'+
                   '<p class="title">'+item.title+'</p>'+
                   '<p class="description">'+item.description+'</p>'+
                   '<p class="location"><i class="fa fa-map-marker-alt"></i> '+ location+'</p>'+
                   '<p class="date"><i class="fa fa-calendar"></i> '+item.date+'</p>'+
-                  '<span class="badge '+badge+'"> '+item.source+'</span>'+
+                  '<span class="badge '+badge+' bottom"> '+item.source+'</span>'+
                 '</div>'+
               '</div>'+
               '</a>'+
