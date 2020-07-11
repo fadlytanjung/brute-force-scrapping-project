@@ -12,6 +12,7 @@ bs4 = "==0.0.1"
 requests = "==2.22.0"
 requests-unixsocket = "==0.2.0"
 python-dotenv = "==0.13.0"
+fuzzywuzzy = "==0.18.0"
 
 [requires]
 python_version = "3.8"
