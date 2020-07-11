@@ -1,4 +1,5 @@
 from flask import Flask, jsonify ,request, render_template
+from fuzzywuzzy import fuzz
 from BruteForce import BruteForce
 import sys, os
 import time
@@ -24,8 +25,18 @@ def search():
     search = bf.search
 
     data = search(jsonData['data'])
+    newData = []
+    for item in data:
+        print(get_ratio(jsonData['data'],item['title']))
+        if get_ratio(jsonData['data'],item['title']) > 50:
+            newData.append(item)
     return jsonify({ 'code':200, 'message' : 'Data Fetched',
-    'data': data,'time':(time.time() - start_time) }), 200
+    'data': newData,'time':(time.time() - start_time) }), 200
+
+def get_ratio(str1,str2):
+    str1 = str1.lower()
+    str2 = str2.lower()
+    return fuzz.token_set_ratio(str1, str2)
 
 @app.route('/crawl')
 def crawl():
