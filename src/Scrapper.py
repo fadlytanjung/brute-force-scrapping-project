@@ -19,7 +19,7 @@ class Scrapper:
         return soup(content, 'html.parser')
     
     def json_save(self, data, name):
-        with open(BASE_PATH+'data/temp-{name}.json'.format(name=name), 'w+') as f:
+        with open(BASE_PATH+'data/{name}.json'.format(name=name), 'w+') as f:
             return json.dump(data, f)
     
     def json_load(self, path):
