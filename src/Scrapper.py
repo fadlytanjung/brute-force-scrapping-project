@@ -449,7 +449,7 @@ class Scrapper:
 
     def jadwalEvent(self):
 
-        BASE_URL = 'https://jadwalevent.web.id/lomba/page/'
+        BASE_URL = 'https://jadwalevent.web.id/page/'
 
         temp = []
         i = 1
@@ -468,8 +468,7 @@ class Scrapper:
                     link = item.find_all('h2', class_='post-title')[0].find_all('a',href=True)[0]['href']
                     
                     srcImg = item.find_all('div', class_='post-thumbnail')
-                    image = srcImg[0].select('img', src=True)[0]['src'] if len(srcImg) > 0 else srcImg
-                   
+                    image = srcImg[0].select('img', src=True)[0]['src'] if len(srcImg[0].select('img', src=True)) > 0 else '' if len(srcImg) > 0 else srcImg
                     category = item.find_all('p', class_='post-category')[0]
                     
                     if category != None:
@@ -489,7 +488,7 @@ class Scrapper:
                         'location': location,
                         'description': description,
                         'date': date,
-                        'source':'https://jadwalevent.web.id/lomba'
+                        'source':'https://jadwalevent.web.id/'
                     }
                     temp.append(newObject)
             i+=1
@@ -497,16 +496,16 @@ class Scrapper:
 if __name__ == "__main__":
     
     scr = Scrapper()
-    scr.ruangmahasiswaHelper()
-    scr.eventkampusHelper()
-    scr.anakteknikHelper()
-    scr.informasilombaHelper()
-    scr.lombapadHelper()
+    # scr.ruangmahasiswaHelper()
+    # scr.eventkampusHelper()
+    # scr.anakteknikHelper()
+    # scr.informasilombaHelper()
+    # scr.lombapadHelper()
     # scr.lombaasiaHelper() # suspend
-    scr.infolombaHelper()
-    scr.eventMahasiswa()
+    # scr.infolombaHelper()
+    # scr.eventMahasiswa()
     scr.jadwalEvent()
-    scr.eventpelajarHelper()
+    # scr.eventpelajarHelper()
     scr.mergeJsonFiles('data/')
  
     

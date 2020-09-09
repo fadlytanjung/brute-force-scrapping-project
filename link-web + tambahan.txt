@@ -16,7 +16,7 @@ https://eventkampus.com/event?page=1 -> sampai halaman 214
 https://www.anakteknik.co.id/event/lomba
 https://eventmahasiswa.com/category/event/
 https://eventmahasiswa.com/category/lomba/
-https://jadwalevent.web.id/lomba
+https://jadwalevent.web.id/lomba # checkpoint
 https://talamedia.id/read/events/
 https://www.haievent.com/event/lomba/
 https://ayokuliah.id/poster/
