@@ -47,14 +47,16 @@ def crawl():
 @app.route('/crawlprocess', methods=['POST'])
 def crawlprocess():
     jsonData = request.json
-    bf.eventpelajarHelper()
     bf.ruangmahasiswaHelper()
     bf.eventkampusHelper()
     bf.anakteknikHelper()
     bf.informasilombaHelper()
     bf.lombapadHelper()
-    bf.lombaasiaHelper()
+    # scr.lombaasiaHelper() # suspend
     bf.infolombaHelper()
+    bf.eventMahasiswa()
+    bf.jadwalEvent()
+    bf.eventpelajarHelper()
     bf.mergeJsonFiles('data/')
 
     try:

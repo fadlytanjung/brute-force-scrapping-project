@@ -14,7 +14,10 @@ class Scrapper:
 
     def reqPage(self, URL):
         return req.get(URL)
-    
+
+    def fetch(self,method,url, payload=None, headers=None):
+        return req.request(method,url,data=payload,headers=headers)
+
     def htmlParser(self, content):
         return soup(content, 'html.parser')
     
@@ -61,15 +64,16 @@ class Scrapper:
                     title = title.get_text().strip()
                     link = item.find_all('h2', class_='entry-title')[0].find_all('a',href=True)[0]['href']
                     
-                    srcImg = item.find_all('a', class_='ct-image-container')
-                    image = srcImg[0].find_all('img', src=True)[0]['src'] if len(srcImg) > 0 else srcImg
+                    srcImg = item.find_all('img', class_='attachment-medium_large')
+                    image = srcImg.find_all('img', src=True)[0]['src'] if len(srcImg) > 0 else ''
         
                     category = item.find_all('span', class_='ct-meta-element')
                     if len(category) > 0:
                         category = category[0].get_text().strip()
                     location  = ''
                     
-                    description = item.find_all('div', class_='entry-excerpt')[0].get_text().strip()
+                    description = item.find_all('div', class_='entry-excerpt')[0].get_text().strip() if len(item.find_all('div', class_='entry-excerpt')) > 0 else ''
+
                     date = item.find_all('li', class_='ct-meta-date')
                     if len(date)> 0:
                         date = date[0].get_text().strip()
@@ -91,7 +95,7 @@ class Scrapper:
 
         temp = []
         i = 1
-        while i <=960: #960
+        while i <=4800: #960
             print('ruang mahasiswa page '+str(i))
             page = self.reqPage(BASE_URL+str(i))
             if page.status_code != 404:
@@ -264,7 +268,7 @@ class Scrapper:
 
         temp = []
         i = 1
-        while i <=160: #160
+        while i <=360: #160
             print('lombapad page '+str(i))
             page = self.reqPage(BASE_URL+str(i))
             if page.status_code != 404:
@@ -298,49 +302,49 @@ class Scrapper:
         
         return self.json_save(temp, 'lombapad')
 
-    def lombaasiaHelper(self):
-        BASE_URL = 'http://lomba.asia/?page=1'
+    # def lombaasiaHelper(self):
+    #     BASE_URL = 'http://lomba.asia/?page=1'
 
-        temp = []
-        i = 1
-        while i <=500: #500
-            time.sleep(1)
-            print('lombaasia page '+str(i))
-            page = self.reqPage(BASE_URL+str(i))
-            if page.status_code != 404:
-                parser = self.htmlParser(page.content)
-                tag = parser.find_all('article', class_='card')
-                for item in tag:
-                    title = item.find_all('h2', class_='card-title')[0]
-                    if title != None:
-                        title = title.get_text().strip().encode('ascii', 'ignore')
+    #     temp = []
+    #     i = 1
+    #     while i <=500: #500
+    #         time.sleep(1)
+    #         print('lombaasia page '+str(i))
+    #         page = self.reqPage(BASE_URL+str(i))
+    #         if page.status_code != 404:
+    #             parser = self.htmlParser(page.content)
+    #             tag = parser.find_all('article', class_='card')
+    #             for item in tag:
+    #                 title = item.find_all('h2', class_='card-title')[0]
+    #                 if title != None:
+    #                     title = title.get_text().strip().encode('ascii', 'ignore')
 
-                    link = item.find_all('h2', class_='card-title')[0].find_all('a',href=True)[0]['href']
-                    srcImg = item.find_all('img',class_='card-img-top',src=True)
-                    image = srcImg[0]['src'] if len(srcImg) > 0 else srcImg
+    #                 link = item.find_all('h2', class_='card-title')[0].find_all('a',href=True)[0]['href']
+    #                 srcImg = item.find_all('img',class_='card-img-top',src=True)
+    #                 image = srcImg[0]['src'] if len(srcImg) > 0 else srcImg
                 
-                    category = item.find_all('nav', class_='border-top')[0].get_text().strip()
-                    location  = ''
-                    description = item.find_all('p', class_='card-text')[0].get_text().strip()
-                    date = item.find_all('small')[0]
-                    if date.i != None:
-                        date.i.decompose()
-                    date = date.get_text().strip()
+    #                 category = item.find_all('nav', class_='border-top')[0].get_text().strip()
+    #                 location  = ''
+    #                 description = item.find_all('p', class_='card-text')[0].get_text().strip()
+    #                 date = item.find_all('small')[0]
+    #                 if date.i != None:
+    #                     date.i.decompose()
+    #                 date = date.get_text().strip()
                     
-                    newObject = {
-                        'title': str(title.decode('utf-8')),
-                        'link': link,
-                        'image': image,
-                        'category': category,
-                        'location': location,
-                        'description': description,
-                        'date': date,
-                        'source':'http://lomba.asia/'
-                    }
-                    temp.append(newObject)
-            i+=1
+    #                 newObject = {
+    #                     'title': str(title.decode('utf-8')),
+    #                     'link': link,
+    #                     'image': image,
+    #                     'category': category,
+    #                     'location': location,
+    #                     'description': description,
+    #                     'date': date,
+    #                     'source':'http://lomba.asia/'
+    #                 }
+    #                 temp.append(newObject)
+    #         i+=1
         
-        return self.json_save(temp, 'lombaasia')
+    #     return self.json_save(temp, 'lombaasia')
 
     def infolombaHelper(self):
         BASE_URL=[
@@ -396,17 +400,113 @@ class Scrapper:
                 temp.append(newObject)
         return self.json_save(temp, 'infolomba')
 
+    def eventMahasiswa(self):
+
+        BASE_URL = 'https://eventmahasiswa.com/category/event/'
+
+        temp = []
+        i = 1
+        while i <=100: #900
+            for item in ['event','lomba']:
+                page = self.reqPage(BASE_URL) if i == 1 else self.fetch(
+                    'POST', 'https://eventmahasiswa.com/wp-json/nv/v1/posts/page/'+str(i),
+                    { "category_name": item })
+                if (page.status_code != 404 or page.status_code != 400) and len(self.htmlParser(page.content))>1:
+                    print('event mahasiswa page '+item+' '+str(i))
+                    parser = self.htmlParser(page.content)
+                    tag = parser.find_all('div', class_='article-content-col')
+                    for item in tag:
+                        title = item.find_all('h2', class_='blog-entry-title')[0]
+
+                        if title != None:
+                            title = title.get_text().strip().encode('ascii', 'ignore')
+                    
+                        link = item.find_all('h2', class_='blog-entry-title')[0].find_all('a',href=True)[0]['href']
+                        srcImg = item.find_all('div', class_='nv-post-thumbnail-wrap')
+                        image = srcImg[0].select('img', src=True)[0]['src'] if len(srcImg) > 0 else srcImg
+                        category = item.find_all('li', class_='meta category')[0]
+                        if category != None:
+                            category = category.get_text().strip()
+                        location  = ''
+                        description = ''
+                        date = item.find_all('li', class_='meta date posted-on')[0]
+                        if date != None:
+                            date = date.find_all('time',class_='entry-date published')[0].get_text().strip()
+                    
+                        newObject = {
+                            'title': str(title.decode('utf-8')),
+                            'link': link,
+                            'image': image,
+                            'category': category,
+                            'location': location,
+                            'description': description,
+                            'date': date,
+                            'source':'https://eventmahasiswa.com/'
+                        }
+                        temp.append(newObject)
+            i+=1
+        return self.json_save(temp, 'eventmahasiswa')
+
+    def jadwalEvent(self):
+
+        BASE_URL = 'https://jadwalevent.web.id/lomba/page/'
+
+        temp = []
+        i = 1
+        while i <=500: #900
+            page = self.reqPage(BASE_URL+str(i))
+            if (page.status_code != 404 or page.status_code != 400):
+                print('event jadwalevent page '+str(i))
+                parser = self.htmlParser(page.content)
+                tag = parser.find_all('div', class_='post-inner')
+                for item in tag:
+                    title = item.find_all('h2', class_='post-title')[0]
+
+                    if title != None:
+                        title = title.get_text().strip().encode('ascii', 'ignore')
+                
+                    link = item.find_all('h2', class_='post-title')[0].find_all('a',href=True)[0]['href']
+                    
+                    srcImg = item.find_all('div', class_='post-thumbnail')
+                    image = srcImg[0].select('img', src=True)[0]['src'] if len(srcImg) > 0 else srcImg
+                   
+                    category = item.find_all('p', class_='post-category')[0]
+                    
+                    if category != None:
+                        category = category.get_text().strip().split('/')
+
+                    location  = ''
+                    description = item.find_all('div',class_='entry excerpt')[0]
+                    if description != None:
+                        description = description.get_text().strip()
+                    date = category[0] if len(category) > 0 else ''
+                  
+                    newObject = {
+                        'title': str(title.decode('utf-8')),
+                        'link': link,
+                        'image': image,
+                        'category': ','.join(category),
+                        'location': location,
+                        'description': description,
+                        'date': date,
+                        'source':'https://jadwalevent.web.id/lomba'
+                    }
+                    temp.append(newObject)
+            i+=1
+        return self.json_save(temp, 'jadwalevent')
 if __name__ == "__main__":
     
     scr = Scrapper()
-    scr.eventpelajarHelper()
     scr.ruangmahasiswaHelper()
     scr.eventkampusHelper()
     scr.anakteknikHelper()
     scr.informasilombaHelper()
     scr.lombapadHelper()
-    scr.lombaasiaHelper()
+    # scr.lombaasiaHelper() # suspend
     scr.infolombaHelper()
-    scr.mergeJsonFiles(BASE_PATH+'data/')
+    scr.eventMahasiswa()
+    scr.jadwalEvent()
+    scr.eventpelajarHelper()
+    scr.mergeJsonFiles('data/')
  
     
