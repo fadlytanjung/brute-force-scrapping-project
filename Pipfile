@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-numpy = "==1.18.3"
+numpy = "==1.22.0"
 flask = "==1.1.2"
 bs4 = "==0.0.1"
 requests = "==2.22.0"
